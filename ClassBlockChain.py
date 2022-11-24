@@ -2,18 +2,21 @@ import json
 import hashlib
 
 from time import time
+from flask import Flask
+from uuid import uuid4
+from flask import jsonify, request
 
-
-class Blockchain(object):
+class Blockchain:
     def __int__(self):
         self.chain = []
         self.current_transaction = []
+        self.nodes = set()
 
         # First Block
         self.new_block(previous_hash=1, prof=100)
 
 
-    def new_block(self, prof, previous_hash=None):
+    def new_block(self, prof, previous_hash):
         # Add new block
 
         block = {
