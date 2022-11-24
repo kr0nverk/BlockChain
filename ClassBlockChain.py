@@ -6,11 +6,10 @@ from flask import Flask
 from uuid import uuid4
 from flask import jsonify, request
 
-class Blockchain:
-    def __int__(self):
+class Blockchain(object):
+    def __init__(self):
+        self.current_transactions = []
         self.chain = []
-        self.current_transaction = []
-        self.nodes = set()
 
         # First Block
         self.new_block(previous_hash=1, prof=100)
@@ -22,12 +21,12 @@ class Blockchain:
         block = {
             'index': len(self.chain) + 1,
             'timestamp': time(),
-            'transaction': self.current_transaction,
+            'transaction': self.current_transactions,
             'prof': prof,
-            'previous_hash': self.hash(self.chain[-1]) or previous_hash,
+            'previous_hash': previous_hash or self.hash(self.chain[-1]),
         }
 
-        self.current_transaction = []
+        self.current_transactions = []
 
         self.chain.append(block)
         return block
@@ -43,13 +42,14 @@ class Blockchain:
 
         return self.last_block['index'] + 1
 
+    @staticmethod
     def hash(block):
         # Hash of block
 
         block_string = json.dumps(block, sort_keys=True).encode()
         return hashlib.sha256(block_string).hexdigest()
 
-
+    @property
     def last_block(self):
         # Return last block
         return self.chain[-1]
@@ -64,6 +64,7 @@ class Blockchain:
 
         return prof
 
+    @staticmethod
     def prof_valid(last_prof, prof):
         #
 
