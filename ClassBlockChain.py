@@ -34,7 +34,7 @@ class Blockchain(object):
     def new_transaction(self, sender, recipient, amount):
         # Add new transaction
 
-        self.current_transaction.append({
+        self.current_transactions.append({
             'sender': sender,
             'recipient': recipient,
             'amount': amount,
@@ -70,4 +70,4 @@ class Blockchain(object):
 
         x = f'{last_prof}{prof}'.encode()
         x_hash = hashlib.sha256(x).hexdigest()
-        return x_hash[:4] == "0000"
+        return x_hash[:5] == "00000"

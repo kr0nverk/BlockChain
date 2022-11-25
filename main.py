@@ -8,7 +8,6 @@ from flask import jsonify, request
 
 from ClassBlockChain import Blockchain
 
-from textwrap import dedent
 
 #def create_first_block():
 #
@@ -34,7 +33,9 @@ def hello_world():
 
 @app.route('/mine', methods=['GET'])
 def mine():
-    last_block = blockchain.last_block()
+
+
+    last_block = blockchain.last_block
     last_prof = last_block['prof']
     prof = blockchain.prof_of_work(last_prof)
 
@@ -44,7 +45,8 @@ def mine():
         amount=1,
     )
 
-    block = blockchain.new_block(prof)
+    previous_hash = blockchain.hash(last_block)
+    block = blockchain.new_block(prof, previous_hash)
 
     response = {
         'message': "New Block Add",
